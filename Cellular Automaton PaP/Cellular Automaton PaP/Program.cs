@@ -179,7 +179,7 @@ namespace Cellular_Automaton_PaP
             predatorCountText.DisplayedString = "Predator: " + predatorCount;
         }
 
-        
+
 
         private void UpdatePredator(Creature thisCreature, Creature otherCreature)
         {
@@ -187,6 +187,11 @@ namespace Cellular_Automaton_PaP
             {
                 thisCreature.creatureType = Creature.CreatureType.Nothing;
                 predatorCount--;
+                if (predatorCount == 0)
+                {
+                    newPredator();
+                    predatorCount++;
+                }
                 return;
             }
 
@@ -207,6 +212,20 @@ namespace Cellular_Automaton_PaP
                 default:
                     break;
             }
+        }
+
+        private void newPredator()
+        {
+            var vertex = pixels[getIndex((int)widthUint / 2, (int)heightUint / 2)];
+            var creature = creatures[getIndex((int)widthUint / 2, (int)heightUint / 2)];
+
+
+            creature.creatureType = Creature.CreatureType.Predator;
+            creature.health = 100;
+            vertex.Color = creature.GetColor();
+
+            pixels[getIndex((int)widthUint / 2, (int)heightUint / 2)] = vertex;
+            creatures[getIndex((int)widthUint / 2, (int)heightUint / 2)] = creature;
         }
 
         private void UpdatePrey(Creature thisCreature, Creature otherCreature)
