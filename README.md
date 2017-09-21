@@ -22,4 +22,4 @@ Prey (green):
 ## ToDo
 - Remove SFML.net dependency.
 - Make simulation more consistent.
-- Add a few commmands.
+- Add a few commands.
