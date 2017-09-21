@@ -19,7 +19,7 @@ Prey (green):
   - Reproduce, creating a new prey.
   - Health is reset to 1.
 
-##ToDo
+## ToDo
 - Remove SFML.net dependency.
 - Make simulation more consistent.
 - Add a few commmands.
