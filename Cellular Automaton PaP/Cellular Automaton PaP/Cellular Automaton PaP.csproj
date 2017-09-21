@@ -70,31 +70,54 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="csfml-audio-2.dll">
+    <ContentWithTargetPath Include="SFML.net\csfml-audio-2.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <TargetPath>csfml-audio-2.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="SFML.net\csfml-graphics-2.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <TargetPath>csfml-graphics-2.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="SFML.net\csfml-network-2.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <TargetPath>csfml-network-2.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="SFML.net\csfml-system-2.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <TargetPath>csfml-system-2.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="SFML.net\csfml-window-2.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <TargetPath>csfml-window-2.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="SFML.net\libsndfile-1.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <TargetPath>libsndfile-1.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="SFML.net\openal32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <TargetPath>openal32.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="SFML.net\OpenTK.Compatibility.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <TargetPath>OpenTK.Compatibility.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="SFML.net\OpenTK.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <TargetPath>OpenTK.dll</TargetPath>
+    </ContentWithTargetPath>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SFML.net\sfmlnet-audio-2.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="csfml-graphics-2.dll">
+    <None Include="SFML.net\sfmlnet-graphics-2.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="csfml-network-2.dll">
+    <None Include="SFML.net\sfmlnet-system-2.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="csfml-system-2.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="csfml-window-2.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="libsndfile-1.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="openal32.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="OpenTK.Compatibility.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="OpenTK.dll">
+    <None Include="SFML.net\sfmlnet-window-2.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
