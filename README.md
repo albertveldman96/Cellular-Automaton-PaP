@@ -2,7 +2,7 @@
 Cellular Automaton Predator and Prey
 
 This simulation works in steps.
-Every step the following rules will be followed:
+Every step the following rules will be followed:  
 Predator (red):
 - Moves in a random direction.
 - Health decreases.
