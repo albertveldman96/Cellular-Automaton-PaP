@@ -21,4 +21,6 @@ Prey (green):
 
 ## ToDo
 - Make simulation more consistent.
-- Add a few commands.
+- Fix window not gaining focus.
+- Fix window not responding to any input.
+- Probably remove SFML dependency to fix previous two.
