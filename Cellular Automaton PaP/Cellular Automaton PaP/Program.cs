@@ -8,25 +8,27 @@ namespace Cellular_Automaton_PaP
 {
     class Program
     {
-        static uint widthUint = 600;
-        static uint heightUint = 400;
+        static uint widthInt = 600;
+        static uint heightInt = 400;
         static Random rnd = new Random();
 
-        VideoMode videoMode = new VideoMode(widthUint, heightUint);
+        VideoMode videoMode = new VideoMode(widthInt, heightInt);
         RenderWindow window;
-        View view;
+
         VertexArray pixels;
         Creature[] creatures;
+
         Text frameCountText;
         Text preyCountText;
         Text predatorCountText;
         Font textFont;
+        int characterSize = 15;
 
         RectangleShape outline;
         int frameCount;
         int preyCount;
         int predatorCount;
-
+        
 
         static void Main(string[] args)
         {
@@ -36,55 +38,56 @@ namespace Cellular_Automaton_PaP
 
         public void Setup()
         {
+            SetBaseVariables();
+            window.SetFramerateLimit(60);
+            SetTextProperties();
+            SetPixelsAndCreatures();
+
+            //window.Closed += (s, a) => window.Close();
+            Run();
+        }
+
+        private void SetBaseVariables()
+        {
+            var pixelAmount = widthInt * heightInt;
             window = new RenderWindow(videoMode, "Cellular Automoton");
-            view = new View(new Vector2f(widthUint / 2, heightUint / 2), new Vector2f(widthUint, heightUint));
-            pixels = new VertexArray(PrimitiveType.Points, widthUint * heightUint);
-            creatures = new Creature[widthUint * heightUint];
+            pixels = new VertexArray(PrimitiveType.Points, pixelAmount);
+            creatures = new Creature[pixelAmount];
             frameCount = 0;
             preyCount = 0;
             predatorCount = 0;
 
-            textFont = new Font(Path.Combine(Environment.CurrentDirectory, "arial.ttf"));
-
             frameCountText = new Text();
+            preyCountText = new Text();
+            predatorCountText = new Text();
+            textFont = new Font(Path.Combine(Environment.CurrentDirectory, "arial.ttf"));
+        }
+
+        private void SetTextProperties()
+        {
             frameCountText.CharacterSize = 15;
             frameCountText.Color = Color.White;
             frameCountText.Position = new Vector2f(0, 30);
             frameCountText.Font = textFont;
 
-            preyCountText = new Text();
-            preyCountText.CharacterSize = 15;
-            preyCountText.Color = Color.White;
-            preyCountText.Position = new Vector2f(0, 0);
-            preyCountText.Font = textFont;
-
-            predatorCountText = new Text();
             predatorCountText.CharacterSize = 15;
             predatorCountText.Color = Color.White;
             predatorCountText.Position = new Vector2f(0, 15);
             predatorCountText.Font = textFont;
 
-
-
-            //outline = new RectangleShape(new Vector2f(widthInt, heightInt));
-            //outline.OutlineColor = Color.White;
-            //outline.OutlineThickness = 5;
-            //outline.FillColor = new Color(0, 0, 0, 0);
-
-            window.SetFramerateLimit(60);
-            CreatePixelsCreatures();
-
-            //window.Closed += (s, a) => window.Close();
-
-            Run();
+            preyCountText.CharacterSize = 15;
+            preyCountText.Color = Color.White;
+            preyCountText.Position = new Vector2f(0, 0);
+            preyCountText.Font = textFont;
         }
 
-        private void CreatePixelsCreatures()
+        private void SetPixelsAndCreatures()
         {
-            for (int x = 0; x < widthUint; x++)
+            for (int x = 0; x < widthInt; x++)
             {
-                for (int y = 0; y < heightUint; y++)
+                for (int y = 0; y < heightInt; y++)
                 {
+                    //Creature type is randomly selected when created
                     var creature = new Creature();
                     var vertex = new Vertex();
                     vertex.Position = new Vector2f(x, y);
@@ -111,37 +114,34 @@ namespace Cellular_Automaton_PaP
 
         private void Run()
         {
-            //var clock = new Clock();
             while (window.IsOpen)
             {
-                //var deltaTime = clock.Restart().AsSeconds();
                 window.Clear();
                 Update();
 
-                //window.SetView(view);
                 window.Draw(pixels);
-                //window.Draw(outline);
                 window.Draw(frameCountText);
                 window.Draw(preyCountText);
                 window.Draw(predatorCountText);
-
                 window.Display();
-                frameCount++;
             }
         }
 
         private void Update()
         {
-            for (int x = 0; x < widthUint; x++)
+            for (int x = 0; x < widthInt; x++)
             {
-                for (int y = 0; y < heightUint; y++)
+                for (int y = 0; y < heightInt; y++)
                 {
                     var index = getIndex(x, y);
                     var thisCreature = creatures[index];
-                    var creatureType = thisCreature.creatureType;
+                    var thisCreatureType = thisCreature.creatureType;
 
-                    if (creatureType == Creature.CreatureType.Nothing)
+                    //Go to next position if this one is nothing
+                    if (thisCreatureType == Creature.CreatureType.Nothing)
                         continue;
+
+                    thisCreature.UpdateCreatureHealth();
 
                     //Randomly move max one pixel in x and y
                     int xMove = rnd.Next(-1, 2);
@@ -150,14 +150,14 @@ namespace Cellular_Automaton_PaP
                     var newY = y + yMove;
 
                     //Abort if new position is outside of area.
-                    if (newX < 0 || newX >= widthUint) continue;
-                    if (newY < 0 || newY >= heightUint) continue;
+                    if (newX < 0 || newX >= widthInt) continue;
+                    if (newY < 0 || newY >= heightInt) continue;
 
                     var newIndex = getIndex(newX, newY);
                     var otherCreature = creatures[newIndex];
 
-                    thisCreature.Update();
-                    switch (creatureType)
+                    //Action depends on creaturetype and status of new position.
+                    switch (thisCreatureType)
                     {
                         case Creature.CreatureType.Predator:
                             UpdatePredator(thisCreature, otherCreature);
@@ -169,24 +169,28 @@ namespace Cellular_Automaton_PaP
                             break;
                     }
 
+                    //Update pixel color
                     var vertex = pixels[index];
                     vertex.Color = thisCreature.GetColor();
                     pixels[index] = vertex;
                 }
             }
+
+            //Update creature and frame count text
+            frameCount++;
             frameCountText.DisplayedString = "Steps: " + frameCount;
             preyCountText.DisplayedString = "Prey: " + preyCount;
             predatorCountText.DisplayedString = "Predator: " + predatorCount;
         }
 
-
-
         private void UpdatePredator(Creature thisCreature, Creature otherCreature)
         {
+            //If health is 0 or lower, predator dies.
             if (thisCreature.health <= 0)
             {
                 thisCreature.creatureType = Creature.CreatureType.Nothing;
                 predatorCount--;
+                //Create new predator in center of screen if last predator dies.
                 if (predatorCount == 0)
                 {
                     newPredator();
@@ -194,10 +198,10 @@ namespace Cellular_Automaton_PaP
                 }
                 return;
             }
-
-            var typeTwo = otherCreature.creatureType;
-            switch (typeTwo)
+            
+            switch (otherCreature.creatureType)
             {
+                //If other creature is prey. prey dies, predator is healed, new predator is created on prey position.
                 case Creature.CreatureType.Prey:
                     otherCreature.creatureType = Creature.CreatureType.Predator;
                     thisCreature.HealCreature(otherCreature.health);
@@ -205,32 +209,36 @@ namespace Cellular_Automaton_PaP
                     preyCount--;
                     break;
 
+                //If other creature is nothing. predator moves to new position.
                 case Creature.CreatureType.Nothing:
                     thisCreature.MoveCreature(otherCreature);
                     break;
 
+                //If other creature is predator. nothing happens.
                 default:
                     break;
             }
         }
 
+        //Create new predator in center of screen.
         private void newPredator()
         {
-            var vertex = pixels[getIndex((int)widthUint / 2, (int)heightUint / 2)];
-            var creature = creatures[getIndex((int)widthUint / 2, (int)heightUint / 2)];
-
+            var center = getIndex((int)widthInt / 2, (int)heightInt / 2);
+            var vertex = pixels[center];
+            var creature = creatures[center];
 
             creature.creatureType = Creature.CreatureType.Predator;
             creature.health = 100;
             vertex.Color = creature.GetColor();
 
-            pixels[getIndex((int)widthUint / 2, (int)heightUint / 2)] = vertex;
-            creatures[getIndex((int)widthUint / 2, (int)heightUint / 2)] = creature;
+            //Set new variables in array
+            pixels[center] = vertex;
+            creatures[center] = creature;
         }
 
         private void UpdatePrey(Creature thisCreature, Creature otherCreature)
         {
-            var typeTwo = otherCreature.creatureType;
+            //If health is max. Create new prey.
             bool reproduce = false;
             if (thisCreature.health >= Creature.MAX_HEALTH)
             {
@@ -238,12 +246,9 @@ namespace Cellular_Automaton_PaP
                 reproduce = true;
             }
 
-            switch (typeTwo)
+            switch (otherCreature.creatureType)
             {
-                case Creature.CreatureType.Prey:
-                    break;
-                case Creature.CreatureType.Predator:
-                    break;
+                //If able to reproduce and other creature is nothing. Create new prey. Else move to new position.
                 case Creature.CreatureType.Nothing:
                     if (reproduce)
                     {
@@ -253,14 +258,18 @@ namespace Cellular_Automaton_PaP
                     else
                         thisCreature.MoveCreature(otherCreature);
                     break;
+
+                //If other creature is prey or predator. Nothing happens.
+                default:
+                    break;
             }
         }
 
 
-
+        //Returns 1d array index from 2d location
         private uint getIndex(int x, int y)
         {
-            return (uint)(y * widthUint + x);
+            return (uint)(y * widthInt + x);
         }
     }
 }

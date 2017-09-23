@@ -6,7 +6,7 @@ namespace Cellular_Automaton_PaP
     class Creature
     {
         static public int MAX_HEALTH = 100;
-        static private Random rnd = new Random();
+        static Random rnd = new Random();
 
         public CreatureType creatureType { get; set; }
         public int health { get; set; }
@@ -20,6 +20,9 @@ namespace Cellular_Automaton_PaP
 
         public Creature()
         {
+            //90% of creatures are nothing.
+            //7% of creatures are prey.
+            //3% of creatures are predator.
             health = 100;
             var n = rnd.Next(0, 100);
             if (n > 10)
@@ -30,13 +33,15 @@ namespace Cellular_Automaton_PaP
                 creatureType = CreatureType.Predator;
         }
 
-        public void Update()
+        public void UpdateCreatureHealth()
         {
             switch (creatureType)
             {
+                //Every step, predators lose health.
                 case CreatureType.Predator:
                     HealCreature(-1);
                     break;
+                //Every step, prey gain health.
                 case CreatureType.Prey:
                     HealCreature(2);
                     break;
@@ -47,6 +52,7 @@ namespace Cellular_Automaton_PaP
 
         public void MoveCreature(Creature location)
         {
+            //Set old values to new location
             location.health = health;
             location.creatureType = creatureType;
             creatureType = CreatureType.Nothing;
@@ -68,8 +74,10 @@ namespace Cellular_Automaton_PaP
         {
             if (creatureType == CreatureType.Nothing || health == 0)
                 return Color.Black;
-            var percentageHealth = (float)health / MAX_HEALTH;
-            var healthBasedColor = (byte)(percentageHealth * 255);
+            //var percentageHealth = (float)health / MAX_HEALTH;
+            //var healthBasedColor = (byte)(percentageHealth * 255);
+            
+            //Predators are red, prey are green and nothing or 0 health is black.
             switch (creatureType)
             {
                 case CreatureType.Predator:
