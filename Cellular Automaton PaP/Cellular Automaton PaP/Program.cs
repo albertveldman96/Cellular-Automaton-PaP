@@ -204,6 +204,7 @@ namespace Cellular_Automaton_PaP
                 //If other creature is prey. prey dies, predator is healed, new predator is created on prey position.
                 case Creature.CreatureType.Prey:
                     otherCreature.creatureType = Creature.CreatureType.Predator;
+                    otherCreature.HealCreature(100);
                     thisCreature.HealCreature(otherCreature.health);
                     predatorCount++;
                     preyCount--;
