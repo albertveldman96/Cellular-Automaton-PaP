@@ -20,6 +20,5 @@ Prey (green):
   - Health is reset to 1.
 
 ## ToDo
-- Remove SFML.net dependency.
 - Make simulation more consistent.
 - Add a few commands.
