@@ -20,14 +20,14 @@ namespace Cellular_Automaton_PaP
 
         public Creature()
         {
-            //90% of creatures are nothing.
-            //7% of creatures are prey.
-            //3% of creatures are predator.
-            health = 100;
+            //95% of creatures are nothing.
+            //4% of creatures are prey.
+            //1% of creatures are predator.
+            health = 50;
             var n = rnd.Next(0, 100);
-            if (n > 10)
+            if (n > 5)
                 creatureType = CreatureType.Nothing;
-            else if (n > 3)
+            else if (n > 1)
                 creatureType = CreatureType.Prey;
             else
                 creatureType = CreatureType.Predator;
@@ -43,7 +43,7 @@ namespace Cellular_Automaton_PaP
                     break;
                 //Every step, prey gain health.
                 case CreatureType.Prey:
-                    HealCreature(2);
+                    HealCreature(1);
                     break;
                 default:
                     break;
@@ -74,16 +74,17 @@ namespace Cellular_Automaton_PaP
         {
             if (creatureType == CreatureType.Nothing || health == 0)
                 return Color.Black;
-            //var percentageHealth = (float)health / MAX_HEALTH;
-            //var healthBasedColor = (byte)(percentageHealth * 255);
+            //More health equals brighter color
+            var percentageHealth = (float)health / MAX_HEALTH;
+            var healthBasedColor = 50 + (percentageHealth * 205);
             
             //Predators are red, prey are green and nothing or 0 health is black.
             switch (creatureType)
             {
                 case CreatureType.Predator:
-                    return new Color(255, 0, 0);
+                    return new Color((byte)healthBasedColor, 0, 0);
                 case CreatureType.Prey:
-                    return new Color(0, 255, 0);
+                    return new Color(0, (byte)healthBasedColor, 0);
                 default:
                     return Color.Black;
             }
