@@ -11,8 +11,6 @@ namespace Cellular_Automaton_PaP
         static uint widthInt = 600;
         static uint heightInt = 400;
         static Random rnd = new Random();
-
-        VideoMode videoMode = new VideoMode(widthInt, heightInt);
         RenderWindow window;
 
         VertexArray pixels;
@@ -29,7 +27,6 @@ namespace Cellular_Automaton_PaP
         int preyCount;
         int predatorCount;
         
-
         static void Main(string[] args)
         {
             var program = new Program();
@@ -42,15 +39,15 @@ namespace Cellular_Automaton_PaP
             window.SetFramerateLimit(60);
             SetTextProperties();
             SetPixelsAndCreatures();
-
-            //window.Closed += (s, a) => window.Close();
             Run();
         }
 
         private void SetBaseVariables()
         {
             var pixelAmount = widthInt * heightInt;
-            window = new RenderWindow(videoMode, "Cellular Automoton");
+            window = new RenderWindow(new VideoMode(widthInt, heightInt), "Cellular Automoton", Styles.Default);
+            window.SetActive();
+            window.Closed += (s, a) => window.Close();
             pixels = new VertexArray(PrimitiveType.Points, pixelAmount);
             creatures = new Creature[pixelAmount];
             frameCount = 0;
@@ -265,7 +262,6 @@ namespace Cellular_Automaton_PaP
                     break;
             }
         }
-
 
         //Returns 1d array index from 2d location
         private uint getIndex(int x, int y)
